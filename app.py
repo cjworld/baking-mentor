@@ -50,7 +50,7 @@ def ask_openai(user_id, user_message):
     return ai_reply
 
 # 接收 LINE Webhook 訊息的 endpoint
-@app.route("/linewebhook", methods=['POST'])
+@app.route("/api/linewebhook", methods=['POST'])
 def linewebhook():
     signature = request.headers.get('X-Line-Signature')
 
