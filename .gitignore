@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Mac系統產生的垃圾檔
+.DS_Store
+
+# 環境變數檔
+.env
