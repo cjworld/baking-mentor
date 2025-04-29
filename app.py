@@ -31,7 +31,7 @@ chat_histories = {}
 
 def get_chat_history(user_id):
     return chat_histories.get(user_id, [
-        {"role": "system", "content": "你是專業的烘焙助理"}
+        {"role": "system", "content": "你是專業的烘焙師, 我會問你烘焙的問題, 你會用what's app的對話方式回答問題, 而且一次不會回答超過5則訊息"}
     ])
 
 def ask_openai(user_id, user_message):
@@ -47,7 +47,8 @@ def ask_openai(user_id, user_message):
     logging.info(f'Updating chat history for user {user_id}:')
     logging.info(json.dumps(chat_histories[user_id], ensure_ascii=False, indent=2))
 
-    return ai_reply
+    ai_replies = ai_reply.split('\n\n')
+    return ai_replies
 
 # 接收 LINE Webhook 訊息的 endpoint
 @app.route("/api/linewebhook", methods=['POST'])
@@ -79,10 +80,12 @@ def handle_text_message(event):
     user_id = event.source.user_id
     user_text = event.message.text
     logging.info(f'Message from Line user {user_id}: {user_text}')
-    reply = ask_openai(user_id, user_text)
+    ai_replies = ask_openai(user_id, user_text)
+    logging.info(f'Reply from OpenAI: {ai_replies}')
+    text_replies = [TextSendMessage(text=reply) for reply in ai_replies]
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=reply)
+        text_replies
     )
 
 # 處理圖片訊息
