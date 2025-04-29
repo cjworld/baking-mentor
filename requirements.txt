@@ -3,3 +3,4 @@ gunicorn
 line-bot-sdk
 openai
 python-dotenv
+azure-storage-blob
